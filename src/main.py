@@ -1,5 +1,9 @@
 import sys
 import asyncio
+
+from lagom.container import Container
+from lagom.definitions import Singleton
+
 from composition_renderer import CompositionExecuter, CompositionRenderer
 from composition_providers import CompositionProvider
 from composition_readers import CompositionReader
@@ -8,7 +12,10 @@ from input import hardcoded_layers as layers
 
 
 async def _main() -> None:
-    composition_reader = CompositionReader()
+    container = Container()
+    container[CompositionProvider] = Singleton(CompositionReader)
+    container[CompositionRenderer] = Singleton(CompositionRenderer)
+    container[CompositionExecuter] = Singleton(CompositionExecuter)
     composition_spec = await composition_reader.provide_composition_spec(resolution=app_types.Resolution('1080'),
                                                                    framerate=app_types.Framerate(25),
                                                                    duration=app_types.Duration(5),

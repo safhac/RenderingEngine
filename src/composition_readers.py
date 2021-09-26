@@ -5,17 +5,16 @@ from composition_providers import LayerProvider, CompositionProvider
 import generic_types as app_types
 
 
-class LayerReader:
-    @staticmethod
+class LayerReader(LayerProvider):
     async def provide_layer_spec(
         layer_data: app_types.LayerData
     ) -> LayerSpec:
         return LayerSpec(clip_type=layer_data[0],
-                         clip_args=layer_data[1])
+                         clip_name=layer_data[1],
+                         clip_args=layer_data[2])
 
 
-class CompositionReader:
-    @staticmethod
+class CompositionReader(CompositionProvider):
     async def provide_composition_spec(
         resolution: app_types.Resolution,
         framerate: app_types.Framerate,
