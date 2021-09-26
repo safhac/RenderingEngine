@@ -1,0 +1,11 @@
+# ignore Python virtual environment, the requirements.txt file encapsulates the Python dependencies
+venv/
+
+# ignore MyPy cache
+.mypy_cache/
+
+# ignore Python cache files
+__pycache__/
+
+# ignore intelij files
+.idea/
