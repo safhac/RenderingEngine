@@ -1,11 +1,37 @@
-import typing as t
-from typing import Any, Type, NamedTuple
+import abc
+from typing import Type
+from typing import TypeVar
+from typing import NewType
+from typing import Optional
+from typing import List
+from typing import NamedTuple
+from typing import Dict
+from typing import Any
+from typing import Generic
+from typing import Union
 
-T = t.TypeVar("T")
-A = t.TypeVar("A")
-Name = t.Optional[str]
-ARGS = t.Union[A, t.Dict[str, A]]
-Resolution = t.NewType("Resolution", str)
-Framerate = t.NewType("Framerate", int)
-Duration = t.NewType("Duration", int)
-LayerData = t.Tuple[T, t.Optional[str], t.Optional[ARGS]]
+from moviepy.editor import ImageClip, ImageSequenceClip, ColorClip, VideoClip, VideoFileClip, TextClip  # type: ignore
+
+T = TypeVar("T")
+T_T = Type[T]
+G_T = Generic[T]
+Name = Optional[str]
+ARGS = Dict[str, Any]
+ClipType = Union[ImageClip, ImageSequenceClip, VideoClip, ColorClip, VideoFileClip, TextClip]
+Resolution = NewType("Resolution", str)
+Framerate = NewType("Framerate", int)
+Duration = NewType("Duration", int)
+
+
+class Layer(NamedTuple):
+    layer_type: ClipType
+    layer_name: Name
+    layer_args: ARGS
+
+
+
+class Composition(NamedTuple):
+    resolution: Resolution
+    framerate: Framerate
+    duration: Duration
+    data: List[Layer]

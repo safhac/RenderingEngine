@@ -1,9 +1,8 @@
-import os
 import random
-import gizeh as gz
-import numpy as np
+import glob
+import gizeh as gz  # type: ignore
 from numpy.random import choice
-from moviepy.editor import ImageClip, TextClip, ColorClip, VideoClip, VideoFileClip
+from moviepy.editor import ImageClip, TextClip, ColorClip, VideoClip, VideoFileClip  # type: ignore
 
 
 # from https://zulko.github.io/blog/2014/09/20/vector-animations-with-python/
@@ -33,16 +32,16 @@ def make_frame(t):
     return surface.get_npimage()
 
 
-static_files = os.fspath('../static')
-
-
-random_image = choice(os.listdir(f'{static_files}/image'))
-random_video = choice(os.listdir(f'{static_files}/video'))
-color_names = ["red", "green", "blue", ]
+static_media = lambda t: f'../static/{t}'
+image_files = glob.glob(static_media('image/*'))
+video_files = glob.glob(static_media('video/*'))
+print(image_files, video_files)
+random_image = choice(image_files)
+random_video = choice(video_files)
 sample_texts = ["wingardium leviosa", "🥰🥰🥰🥰", "E=mc^2", "haha"]
 
-random_int = lambda: random.randrange(0, 255)
-random_rgb = [random_int(), random_int(), random_int()]
+random_int = random.randrange(0, 255)
+random_rgb = [random_int, random_int, random_int]
 random_length = lambda: random.randrange(1, 100)
 random_size = (random_length(), random_length())
 random_text = lambda: choice(sample_texts)
@@ -54,7 +53,8 @@ random_square_args = {
 }
 
 random_text_args = {
-    'fontsize': random.randrange(8, 50, 4),
+    'fontsize': random.randrange(8, 60, 4),
+    'font': choice(TextClip.list('font')),
     'color': choice(TextClip.list('color')[3:]),
     'duration': random.randint(1, 5)
 }
@@ -67,5 +67,6 @@ hardcoded_layers = [
     (VideoFileClip, random_video),
     (ImageClip, random_image),
     (TextClip, random_text(), random_text_args),
-    (ColorClip, random_square_args),
-    (VideoClip, make_frame)]
+    # (ColorClip, random_square_args),
+    # (VideoClip, make_frame)
+]

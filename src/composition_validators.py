@@ -1,35 +1,52 @@
 from pydantic import BaseModel, validator
 import typing as t
 import inspect
+from moviepy.editor import ImageClip, ImageSequenceClip, ColorClip, TextClip, VideoClip, VideoFileClip
 
-import generic_types as app_types
+import generic_types as agt
+
+moviepytypes = [ImageClip, ImageSequenceClip, ColorClip, TextClip, VideoClip, VideoFileClip]
 
 
 class LayerSpec(BaseModel):
-    clip_type: app_types.T
-    clip_name: app_types.Name
-    clip_args: app_types.ARGS
+    layer_type: t.Type[agt.ClipType]
+    layer_name: agt.Name = None
+    layer_args: agt.ARGS = None
 
-    @validator('clip_args')
-    @classmethod
-    def clip_args_valid(cls, v, values, **kwargs):
-        """validate that clip_args keys are part of the class __init__"""
-        if isinstance(v, dict):
-            param_names = list(v.keys())
-            clip_type = values['clip_type']
-            clip_params = list(inspect.signature(clip_type.__init__).parameters.keys())
+    class Config:
+        allow_mutation = False
+        arbitrary_types_allowed = True
 
-            if not all(param in clip_params for param in param_names):
-                print(param_names)
-                print(clip_params)
-                raise AttributeError(v, "wrong __init__ parameter")
+    @validator('layer_name', pre=True, always=True)
+    def set_layer_name(cls, layer_name, values):
+        print('set_layer_name')
+        print(layer_name)
+        return layer_name or None
+
+    @validator('layer_args')
+    def set_layer_args(cls, layer_args, values):
+        print('set_layer_args')
+        print(layer_args)
+
+        if isinstance(layer_args, dict):
+            copy_args = layer_args.copy()
+            if copy_args.get('duration', None):
+
+                del copy_args['duration']
+            layer_type = values['layer_type']
+            clip_args = list(inspect.signature(layer_type.__init__).parameters.keys())
+
+            if not all(arg in clip_args for arg in copy_args.keys()):
+                print(layer_args)
+                print(clip_args)
+                raise AttributeError(layer_args, "wrong __init__ parameter")
 
 
 class CompositionSpec(BaseModel):
     """"""
-    resolution: app_types.Resolution
-    framerate: app_types.Framerate
-    duration: app_types.Duration
+    resolution: agt.Resolution
+    framerate: agt.Framerate
+    duration: agt.Duration
     data: t.List[LayerSpec]
 
     class Config:
