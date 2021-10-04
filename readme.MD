@@ -16,7 +16,7 @@ in execute the reader returns the validated data, the validated data is sent to 
 - methods
 1. `render`
 the render loops over the layers and builds the concrete _class_ using the layer's metadata.
-oblivious to whatever library [moviepy or ffmpeg] is returned.  
+> loosely coupled to whatever library [moviepy or ffmpeg] is returned.  
 
 
 #[reading]
@@ -24,4 +24,5 @@ oblivious to whatever library [moviepy or ffmpeg] is returned.
 - initialized with 
 1. `LayerReader` 
 - methods
-1. `executer` uses the reader to validate the `Composition` and the renderer to do the rendering
+1. `provide_composition_spec` validates the layers using `LayerReader` and returns a validated `CompositionSpec`
+
