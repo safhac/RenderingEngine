@@ -67,6 +67,6 @@ hardcoded_layers = [
     (VideoFileClip, random_video),
     (ImageClip, random_image),
     (TextClip, random_text(), random_text_args),
-    # (ColorClip, random_square_args),
-    # (VideoClip, make_frame)
+    (ColorClip, random_square_args),
+    (VideoClip, make_frame)
 ]
