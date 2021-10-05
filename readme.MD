@@ -1,8 +1,11 @@
-#Simple rendering engine 
+# Simple rendering engine
+
 ***
 [Background (1 min read)](https://botika.notion.site/Simple-Rendering-Engine-d79edc612996441bb183326a1409b283)
+***
 
-###Composition:
+#### Composition:
+
 ```
 class Composition(NamedTuple):
     resolution: Resolution
@@ -10,46 +13,63 @@ class Composition(NamedTuple):
     duration: Duration
     data: List[Layer]
 ```
-###Layer:
+
+#### Layer:
+
 ```
 class Layer(NamedTuple):
     layer_type: ClipType
     layer_name: Name
     layer_args: ARGS
 ```
+
+***
+
+#### Executer:
+
+```
+class CompositionExecuter:
     
-- [x] accept a composition 
-- [ ] this is an incomplete item
-- [x] @mentions, #refs, [links](),
-**formatting**, and <del>tags</del
+    def __init__(CompositionReader, CompositionRenderer)
+    
+    def execute(Composition):
+        validated_data = reader.validate(composition)
+        await renderer.render(validated_data)
+    
+```
 
-###[main]
--_input_
-`Composition` 
+#### Renderer:
 
-#[rendering]
-`CompositionExecuter`
-- initialized with
-1. `CompositionReader`
-2. `CompositionRenderer`
-- methods
-1. `execute`
-in execute the reader returns the validated data, the validated data is sent to the renderer
+```
+class CompositionRenderer:
+    
+    def __init__(LayerRenderer)
+        
+    def render(CompositionSpec):
+        instatiate each layer using _module_  
+        ...    
+        process the composition rendering 
+``` 
 
-`CompositionRenderer`
-- initialized with 
-1. `LayerRenderer`
-- methods
-1. `render`
-the render loops over the layers and builds the concrete _class_ using the layer's metadata.
-> this needs to be loosely coupled from whatever library [moviepy or ffmpeg] is returned.  
-- returns the `CompositeVideoClip` 
+#### Reader:
 
-#[reading]
-`CompositionReader` 
-- initialized with 
-1. `LayerReader` 
-- methods
-1. `provide_composition_spec` validates each layer using `LayerReader` 
-- returns a validated `CompositionSpec`
+```
+class CompositionReader(CompositionProvider):
+    
+    def __init__(LayerReader)
+        
+    def provide_composition_spec(Composition)-> CompositionSpec:
+        validate each layer using LayerReader 
+        ...    
+        return validated Composition 
+``` 
 
+#### Validation:
+
+```
+class LayerSpec(BaseModel):
+    1. provide generic mechanism to validate variadic 3rd party _module_ classes
+    2. validate layer type belongs to _module_
+    3. validate layer arguments are legal to the type
+    
+``` 
