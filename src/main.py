@@ -1,11 +1,10 @@
 import sys
 import asyncio
 import typing as t
-
 from lagom.container import Container
 from lagom.definitions import Singleton
 
-from composition_renderer import CompositionExecuter, CompositionRenderer
+from composition_renderer import CompositionExecuter
 from composition_providers import CompositionProvider, LayerProvider
 from composition_readers import CompositionReader, LayerReader
 import generic_types as agt
@@ -59,4 +58,5 @@ if __name__ == "__main__":
         duration=agt.Duration(5),
         data=layers
     )
+    print(composition)
     asyncio.run(_main(composition))

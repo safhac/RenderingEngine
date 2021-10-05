@@ -1,5 +1,31 @@
-#[main]
-`Composition`
+#Simple rendering engine 
+***
+[Background (1 min read)](https://botika.notion.site/Simple-Rendering-Engine-d79edc612996441bb183326a1409b283)
+
+###Composition:
+```
+class Composition(NamedTuple):
+    resolution: Resolution
+    framerate: Framerate
+    duration: Duration
+    data: List[Layer]
+```
+###Layer:
+```
+class Layer(NamedTuple):
+    layer_type: ClipType
+    layer_name: Name
+    layer_args: ARGS
+```
+    
+- [x] accept a composition 
+- [ ] this is an incomplete item
+- [x] @mentions, #refs, [links](),
+**formatting**, and <del>tags</del
+
+###[main]
+-_input_
+`Composition` 
 
 #[rendering]
 `CompositionExecuter`
