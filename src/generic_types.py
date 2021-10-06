@@ -9,11 +9,14 @@ from typing import Dict
 from typing import Any
 from typing import Generic
 from typing import Union
+from typing import Protocol
+from typing import Callable
+
+from functools import partial
 
 from moviepy.editor import ImageClip, ImageSequenceClip, ColorClip, VideoClip, VideoFileClip, TextClip  # type: ignore
 
 T = TypeVar("T")
-T_T = Type[T]
 G_T = Generic[T]
 Name = Optional[str]
 ARGS = Dict[str, Any]
@@ -23,11 +26,18 @@ Framerate = NewType("Framerate", int)
 Duration = NewType("Duration", int)
 
 
-class Layer(NamedTuple):
-    layer_type: ClipType
-    layer_name: Name
-    layer_args: ARGS
 
+class Constructable(Protocol):
+    def __new__(self,
+                  fn: Callable,
+                  ar: tuple,
+                  kw: dict):
+        return lambda fn, ar, kw: partial(fn, ar, kw)
+
+
+class Layer:
+    def __init__(self, source: Constructable) -> None:
+        self = source
 
 
 class Composition(NamedTuple):
